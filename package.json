@@ -1,0 +1,16 @@
+{
+  "name": "blogs-api-ddd",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "npm run install:apps",
+    "install:apps": "chmod +x ./apps_install.sh && ./apps_install.sh"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "directories": {
+    "doc": "docs"
+  }
+}
