@@ -1,13 +1,37 @@
 import express from 'express';
-import 'express-async-errors';
-import { StatusCodes } from 'http-status-codes';
+// import 'express-async-errors';
+// import { StatusCodes } from 'http-status-codes';
 
-const app = express();
+class App {
+  public app: express.Express;
 
-app.use(express.json());
+  constructor() {
+    this.app = express();
+    this.config();
+    this.initRoutes();
+  }
+  private config(): void {
+    const acessControl: express.RequestHandler = (_req, res, next) => {
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Methods', 'GET,POST,DELETE,OPTIONS,PUT,PATCH');
+      res.header('Access-Control-Allow-Headers', '*');
+      next();
+    };
+    this.app.use(express.json());
+    this.app.use(acessControl);
+  }
 
-app.get('/', (req, res) => {
-  res.status(StatusCodes.OK).send('Express + TypeScript');
-});
+  private initRoutes(): void {
+    // Test Route
+    this.app.get('/', (req, res) => res.send('Ok'));
+  }
 
-export default app;
+  public start(PORT: number | string): void {
+    this.app.listen(PORT, () => console.log(`Running on port ${PORT}`));
+  }
+}
+
+export { App };
+
+// this second export is to help with testing
+export const { app } = new App();
