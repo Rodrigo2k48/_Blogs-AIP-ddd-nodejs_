@@ -1,11 +1,11 @@
-import Unauthorized from '../../../error/typeErros/Unauthorized';
+import BadRequest from '../../../error/typeErros/BadRequest';
 
 export class Email {
   private _value: string;
   private static readonly EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   constructor(value: string) {
     if (!Email.EMAIL_REGEX.test(value)) {
-      throw new Unauthorized('"email" must be a valid email');
+      throw new BadRequest('"email" must be a valid email');
     }
     this._value = value;
   }

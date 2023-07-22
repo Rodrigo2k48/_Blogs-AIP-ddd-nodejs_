@@ -6,7 +6,7 @@ describe('Email Value Object', () => {
   describe('in case of success', () => {
     it('must return the email if it is in valid format', () => {
       const email = new Email(EMAIL_VALID);
-      expect(email.value).to.equal(EMAIL_VALID);
+      expect(email.value).toEqual(EMAIL_VALID);
     });
     describe('in case of error', () => {
       it('must throw an error if email is in invalid format', () => {
