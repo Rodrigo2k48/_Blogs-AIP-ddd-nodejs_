@@ -1,4 +1,5 @@
 import { Email } from '../ValueObject/Email/Email';
+import { Password } from '../ValueObject/Password/Password';
 
 interface UserInterface {
   id? : number;
@@ -12,14 +13,14 @@ interface UserInterface {
 export class  User implements UserInterface {
   private _id?: number;
   private _email: Email;
-  private _password: string;
+  private _password: Password;
   private _userName: string;
   private _image?: string;
 
   constructor(email: string, password: string, userName: string, image?: string) {
     this._email = new Email(email);
     this._userName = userName;
-    this._password = password;
+    this._password = new Password(password);
     this._image = image;
   }
   get id(): number | undefined {
@@ -29,7 +30,7 @@ export class  User implements UserInterface {
     return this._email.value;
   }
   get password(): string {
-    return this._password;
+    return this._password.valueInHash();
   }
   get userName(): string {
     return this._userName;
