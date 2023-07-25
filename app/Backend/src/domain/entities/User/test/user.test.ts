@@ -5,7 +5,7 @@ import { EMAIL, PASSWORD, USERNAME, CLASS_PROPERTIES} from './mocks/user.mock';
 describe('User Domain', () => {
   describe('in case of success', () => {
     let user: User;
-    beforeEach(async () => {
+    beforeEach(() => {
       user = new User(EMAIL, PASSWORD, USERNAME);
     });
     it('should be possible to create a User instance', () => {
