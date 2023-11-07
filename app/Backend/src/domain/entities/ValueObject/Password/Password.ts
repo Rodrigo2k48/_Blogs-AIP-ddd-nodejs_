@@ -15,6 +15,12 @@ export class Password implements HashRepository{
   get value() {
     return this._value;
   }
+  set value(value: string) {
+    if (value.length < 6) {
+      throw new BadRequest('"password" length must be at least 6 characters long');
+    }
+    this._value = value;
+  }
   public valueInHash() {
     return bcrypt.hashSync(this._value, this._salt);
   }
