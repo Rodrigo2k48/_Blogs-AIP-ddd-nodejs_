@@ -1,25 +1,26 @@
 import { Email } from '../ValueObject/Email/Email';
 import { Password } from '../ValueObject/Password/Password';
+import { DisplayName } from '../ValueObject/DisplayName/DisplayName';
 
 interface UserInterface {
   id? : number;
   email: string;
   password: string;
-  userName: string;
+  userName?: string;
   image?: string;
 
 }
 
 export class  User implements UserInterface {
-  private _id?: number;
+  private readonly _id?: number;
   private _email: Email;
   private _password: Password;
-  private _userName: string;
+  private _userName?: DisplayName;
   private _image?: string;
 
   constructor(email: string, password: string, userName: string, image?: string) {
     this._email = new Email(email);
-    this._userName = userName;
+    this._userName = new DisplayName(userName);
     this._password = new Password(password);
     this._image = image;
   }
@@ -29,11 +30,17 @@ export class  User implements UserInterface {
   get email(): string {
     return this._email.value;
   }
+  set email(value: string) {
+    this._email.value = value;
+  }
   get password(): string {
     return this._password.valueInHash();
   }
-  get userName(): string {
-    return this._userName;
+  set password(value: string) {
+    this._password.value = value;
+  }
+  get userName(): string | undefined {
+    return this._userName?.value;
   }
   get image(): string | undefined {
     return this._image;
