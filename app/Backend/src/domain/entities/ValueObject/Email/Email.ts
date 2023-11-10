@@ -21,7 +21,7 @@ export class Email {
     if (value === this._value) {
       throw new BadRequest('Email already registered');
     }
-    
+
     this._value = value;
   }
 }

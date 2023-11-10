@@ -1,2 +1,27 @@
 // I'm Brazilian, so in this array there will be obscene words in English and Portuguese too
-export const obsceneWordsDefault: string[] = [ 'nazista', 'faggot', 'nigger', 'nigga', 'nazism', 'nazi', 'hitler', 'femicide', 'homophobia', 'pedophilia', 'pedophile', 'odeio', 'ódio', 'homofobia', 'nazismo', 'bater em', 'matar', 'matador de mulher', 'matador de gay', 'matador de preto', 'matador de negro', 'nazista123', 'nazista', 'ista' ];
+export const obsceneWordsDefault: string[] = [
+  'nazista',
+  'faggot',
+  'nigger',
+  'nigga',
+  'nazism',
+  'nazi',
+  'hitler',
+  'femicide',
+  'homophobia',
+  'pedophilia',
+  'pedophile',
+  'odeio',
+  'ódio',
+  'homofobia',
+  'nazismo',
+  'bater em',
+  'matar',
+  'matador de mulher',
+  'matador de gay',
+  'matador de preto',
+  'matador de negro',
+  'nazista123',
+  'nazista',
+  'ista',
+];

@@ -13,7 +13,7 @@ describe('PostCategories Domain', () => {
     });
     it('there must be all the correct properties in the User class', () => {
       CLASS_PROPERTIES.forEach((pro) => {
-        expect(postCategorie).toHaveProperty(pro); 
+        expect(postCategorie).toHaveProperty(pro);
       });
     });
   });

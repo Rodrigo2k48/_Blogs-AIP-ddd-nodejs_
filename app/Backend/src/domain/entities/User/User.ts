@@ -3,15 +3,14 @@ import { Password } from '../ValueObject/Password/Password';
 import { DisplayName } from '../ValueObject/DisplayName/DisplayName';
 
 interface UserInterface {
-  id? : number;
+  id?: number;
   email: string;
   password: string;
   userName?: string;
   image?: string;
-
 }
 
-export class  User implements UserInterface {
+export class User implements UserInterface {
   private readonly _id?: number;
   private _email: Email;
   private _password: Password;

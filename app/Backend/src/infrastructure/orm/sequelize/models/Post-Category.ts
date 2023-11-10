@@ -19,12 +19,11 @@ SequelizePostCategory.init(
   }
 );
 
-
 SequelizeCategorie.belongsToMany(SequelizeBlogPost, {
   as: 'categories',
-  through: 'post_categories'
+  through: 'post_categories',
 });
 SequelizeBlogPost.belongsToMany(SequelizeCategorie, {
   as: 'posts',
-  through: 'post_categories'
+  through: 'post_categories',
 });

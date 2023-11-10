@@ -5,18 +5,21 @@ export class SequelizeCategorie extends Model<InferAttributes<SequelizeCategorie
   declare id: number | null;
   declare category_name: string;
 }
-SequelizeCategorie.init({
-  id: {
-    type: DataTypes.INTEGER.UNSIGNED,
-    primaryKey: true,
-    autoIncrement: true,
+SequelizeCategorie.init(
+  {
+    id: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    category_name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   },
-  category_name: {
-    type: DataTypes.STRING,
-    allowNull: false,
+  {
+    sequelize,
+    timestamps: false,
+    tableName: 'categories',
   }
-}, {
-  sequelize,
-  timestamps: false,
-  tableName: 'categories'
-});
+);

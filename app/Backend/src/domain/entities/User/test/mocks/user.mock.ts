@@ -1,4 +1,4 @@
-export const OTHER_EMAIL = 'batfamily@email.com'; 
+export const OTHER_EMAIL = 'batfamily@email.com';
 export const OTHER_PASSWORD = 'batman-pass';
 export const OTHER_PASSWORD_HASH = '$2b$10$VbfxzpQdzb/DEa0dE6J7yer97c8b56FbngjmMySX9QkymEeOz9MvK';
 export const EMAIL = 'bruceWane@gmail.com';

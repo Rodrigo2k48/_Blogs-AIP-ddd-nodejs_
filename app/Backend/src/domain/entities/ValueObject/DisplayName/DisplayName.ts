@@ -1,6 +1,6 @@
 import BadRequest from '../../../error/typeErros/BadRequest';
 import Forbidden from '../../../error/typeErros/Forbidden';
-import { CheckingObsceneWords, ObsenceWordsInterface} from '../../CheckingObsceneWords/CheckingObscenceWords';
+import { CheckingObsceneWords, ObsenceWordsInterface } from '../../CheckingObsceneWords/CheckingObscenceWords';
 
 export class DisplayName {
   private _value: string;
@@ -36,4 +36,3 @@ export class DisplayName {
     }
   }
 }
-

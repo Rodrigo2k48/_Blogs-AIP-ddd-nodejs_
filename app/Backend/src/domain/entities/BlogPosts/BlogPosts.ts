@@ -30,8 +30,7 @@ export class BlogPosts implements BlogPostsInterface {
   }
   set titlePost(value: string) {
     if (this._titlePost === value) {
-      throw new BadRequest('Please provide a different title, as the one you suggested has already been established.'
-      );
+      throw new BadRequest('Please provide a different title, as the one you suggested has already been established.');
     }
     this._titlePost = value;
   }
@@ -39,11 +38,9 @@ export class BlogPosts implements BlogPostsInterface {
     return this._contentPost;
   }
   set contentPost(value: string) {
-    if(this._contentPost === value) {
-      throw new BadRequest('Please provide a different content for the post as what you suggested has already been established.'
-      );
+    if (this._contentPost === value) {
+      throw new BadRequest('Please provide a different content for the post as what you suggested has already been established.');
     }
     this._contentPost = value;
   }
-  
 }

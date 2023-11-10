@@ -9,7 +9,7 @@ export class PostCategories implements PostCaregoriesInterface {
 
   constructor(categoryId: number[], postId: number) {
     this._categoryId = categoryId;
-    this._postId = postId; 
+    this._postId = postId;
   }
 
   get categoryId(): number[] {
@@ -18,5 +18,4 @@ export class PostCategories implements PostCaregoriesInterface {
   get postId(): number {
     return this._postId;
   }
-
 }

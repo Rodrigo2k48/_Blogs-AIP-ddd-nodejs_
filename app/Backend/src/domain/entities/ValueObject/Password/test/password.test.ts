@@ -36,7 +36,7 @@ describe('Password Value Object', () => {
       expect(() => new Password(PASSWORD_INVALID)).toThrowError('"password" length must be at least 6 characters long');
     });
     it('should throw an error if the new password passed to replace the previous one has less than 6 characters long', () => {
-      expect(() => new Password(PASSWORD_VALID).value = PASSWORD_INVALID).toThrowError('"password" length must be at least 6 characters long');
+      expect(() => (new Password(PASSWORD_VALID).value = PASSWORD_INVALID)).toThrowError('"password" length must be at least 6 characters long');
     });
   });
 });

@@ -2,9 +2,9 @@ import BadRequest from '../../../error/typeErros/BadRequest';
 import bcrypt from 'bcrypt';
 import { HashRepository } from '../../../repository/HashRepository';
 
-export class Password implements HashRepository{
+export class Password implements HashRepository {
   private _value: string;
-  private readonly _salt: number = 10; 
+  private readonly _salt: number = 10;
 
   constructor(value: string) {
     if (value.length < 6) {

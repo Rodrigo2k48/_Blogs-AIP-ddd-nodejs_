@@ -7,8 +7,8 @@ describe('Categories Domain', () => {
     let categorie: Categories;
     beforeEach(() => {
       categorie = new Categories(CATEGORY);
-    } );
-    it ('should be possible to create a Categories instance', () => {
+    });
+    it('should be possible to create a Categories instance', () => {
       expect(categorie).toBeInstanceOf(Categories);
     });
     it('there must be all the correct proerties in the Blog Posts class', () => {
