@@ -2,7 +2,7 @@ import { Email } from '../ValueObject/Email/Email';
 import { Password } from '../ValueObject/Password/Password';
 import { DisplayName } from '../ValueObject/DisplayName/DisplayName';
 
-interface UserInterface {
+export interface UserInterface {
   id?: number;
   email: string;
   password: string;
@@ -11,13 +11,14 @@ interface UserInterface {
 }
 
 export class User implements UserInterface {
-  private readonly _id?: number;
+  private _id?: number;
   private _email: Email;
   private _password: Password;
   private _userName?: DisplayName;
   private _image?: string;
 
-  constructor(email: string, password: string, userName: string, image?: string) {
+  constructor(email: string, password: string, userName: string, image?: string, id?: number) {
+    this._id = id;
     this._email = new Email(email);
     this._userName = new DisplayName(userName);
     this._password = new Password(password);
