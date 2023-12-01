@@ -33,6 +33,9 @@ export class User implements UserInterface {
   set email(value: string) {
     this._email.value = value;
   }
+  passMethods(): Password {
+    return this._password;
+  }
   get password(): string {
     return this._password.valueInHash();
   }
@@ -46,3 +49,6 @@ export class User implements UserInterface {
     return this._image;
   }
 }
+
+const a = new User('piache@joanete.com', 'paulocesto', 'Paulo Kogos', undefined, 1);
+console.log(a.passMethods);

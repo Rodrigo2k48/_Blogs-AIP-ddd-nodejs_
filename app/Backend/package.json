@@ -7,7 +7,7 @@
     "start": "npm run build && npm run db:reset && tsx ./dist/application/webService/server.js",
     "build": "tsup ./src",
     "dev": "npm run build && npm run db:reset && tsx watch ./src/application/webService/server.ts",
-    "db:reset": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate",
+    "db:reset": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
     "test": "vitest",
     "test:coverage": "vitest run --coverage"
   },
