@@ -23,7 +23,7 @@ describe('ChekingObscenceWords Domain', () => {
     });
     it('if no array is passed, it uses the default array defined within the class', () => {
       const checker = new CheckingObsceneWords();
-      expect(checker.obsceneWords).not.toHaveLength(0);
+      expect(checker.obsceneWords.size).toBeGreaterThan(1);
       checker._obsceneWordsSet = OBSCENE_WORDS_FOR_NICK_NAMES_SET;
       expect(checker.execute(OBSCENE_WORD_INCLUDES_IN_SET)).toBeTruthy();
     });
