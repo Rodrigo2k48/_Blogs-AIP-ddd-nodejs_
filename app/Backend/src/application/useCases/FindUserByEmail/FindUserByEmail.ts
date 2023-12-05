@@ -1,22 +1,20 @@
-import { User } from '../../../domain/entities/User/User';
 import { SequelizeAdapterUser } from '../../../infrastructure/adapters/sequelize/SequelizeAdapter';
+import { UserZod } from '../../validation/zod/schemas/zodValidation';
 
 export class FindUserByEmail extends SequelizeAdapterUser {
 
-  async execute(userEmail: string): Promise<User | boolean> {
+  async execute(userEmail: string): Promise<UserZod | null> {
     const hasUser = await this._sequelizeMethods.findOne({
       where: {
         email: userEmail
       }
     });
     if(!hasUser){
-      return false;
+      return null;
     }
     const {email, id, image, password, user_name} = hasUser.dataValues;
-    return new User(email, password, user_name, image, id as number);
+    const userInDb = {email, id, image, password, user_name};
+    return userInDb;
   }
 } 
-// const a = new FindUserByEmail().execute('AnaLuizaSantos');
-// a.then((res) => console.log(res));
-
 
