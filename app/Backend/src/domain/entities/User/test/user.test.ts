@@ -1,6 +1,7 @@
 import { it, describe, expect, beforeEach, vi } from 'vitest';
 import { User } from '../User';
 import { EMAIL, PASSWORD, USERNAME, CLASS_PROPERTIES, OTHER_EMAIL, OTHER_PASSWORD, OTHER_PASSWORD_HASH, PASSWORD_HASH} from './mocks/user.mock';
+import { Password } from '../../ValueObject/Password/Password';
 
 describe('User Domain', () => {
   describe('in case of success', () => {
@@ -11,12 +12,15 @@ describe('User Domain', () => {
     it('should be possible to create a User instance', () => {
       expect(user).toBeInstanceOf(User);
     });
-    it('It should be possible to modify the user\'s email', () => {
+    it('should be possible to modify the user\'s email', () => {
       expect(user.email).toEqual(EMAIL);
       user.email = OTHER_EMAIL;
       expect(user.email).toEqual(OTHER_EMAIL);
     });
-    it('It should be possible to modify the user\'s password', () => {
+    it('should be possible to access the password methods of the instantiated user class itself', () => {
+      expect(user.passMethods()).toBeInstanceOf(Password);
+    });
+    it('should be possible to modify the user\'s password', () => {
       const mock = vi.fn().mockImplementation(() => user.password).mockImplementationOnce(() => PASSWORD_HASH ).mockImplementationOnce(() => OTHER_PASSWORD_HASH );
       
       expect(mock()).toEqual(PASSWORD_HASH);
