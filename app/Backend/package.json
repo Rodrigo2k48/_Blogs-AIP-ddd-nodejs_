@@ -32,7 +32,7 @@
     "@types/node": "^20.3.3",
     "@types/sequelize": "^4.28.15",
     "@typescript-eslint/eslint-plugin": "^5.61.0",
-    "@vitest/coverage-v8": "^1.0.1",
+    "@vitest/coverage-v8": "^0.33.0",
     "eslint": "^8.44.0",
     "eslint-config-standard-with-typescript": "^36.0.0",
     "eslint-plugin-import": "^2.27.5",
@@ -42,6 +42,6 @@
     "tsup": "^7.1.0",
     "tsx": "^3.12.7",
     "typescript": "^5.1.6",
-    "vitest": "^1.0.1"
+    "vitest": "^0.32.4"
   }
 }
