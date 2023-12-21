@@ -1,5 +1,7 @@
 import express from 'express';
 import 'express-async-errors';
+import authRouter from '../../infrastructure/routes/authRoute';
+import HttpErrorMiddleware from '../../infrastructure/middleware/HttpErrorMiddleware';
 
 class App {
   public app: express.Express;
@@ -8,6 +10,7 @@ class App {
     this.app = express();
     this.config();
     this.initRoutes();
+    this.errorHandler();
   }
   private config(): void {
     const acessControl: express.RequestHandler = (_req, res, next) => {
@@ -23,6 +26,11 @@ class App {
   private initRoutes(): void {
     // Test Route
     this.app.get('/', (req, res) => res.send('Ok'));
+    // Route aplication
+    this.app.use('/login', authRouter);
+  }
+  private errorHandler(): void {
+    this.app.use(HttpErrorMiddleware.error);
   }
 
   public start(PORT: number | string): void {

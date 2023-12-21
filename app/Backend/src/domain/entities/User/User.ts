@@ -48,7 +48,12 @@ export class User implements UserInterface {
   get image(): string | undefined {
     return this._image;
   }
+  get secureUserInfos() {
+    return {
+      id: this._id,
+      email: this._email.value,
+      userName: this._userName?.value,
+      image: this._image,
+    };
+  }
 }
-
-const a = new User('piache@joanete.com', 'paulocesto', 'Paulo Kogos', undefined, 1);
-console.log(a.passMethods);
