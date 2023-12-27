@@ -6,7 +6,7 @@ export class SequelizeUser extends Model<InferAttributes<SequelizeUser>, InferCr
   declare user_name: string;
   declare email: string;
   declare password: string;
-  declare image: string;
+  declare image: string | undefined;
 }
 
 SequelizeUser.init(
@@ -30,7 +30,7 @@ SequelizeUser.init(
     },
     image: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
   },
   {

@@ -14,7 +14,7 @@ export class User implements UserInterface {
   private _id?: number;
   private _email: Email;
   private _password: Password;
-  private _userName?: DisplayName;
+  private _userName: DisplayName;
   private _image?: string;
 
   constructor(email: string, password: string, userName: string, image?: string, id?: number) {
@@ -42,8 +42,8 @@ export class User implements UserInterface {
   set password(value: string) {
     this._password.value = value;
   }
-  get userName(): string | undefined {
-    return this._userName?.value;
+  get userName(): string {
+    return this._userName.value;
   }
   get image(): string | undefined {
     return this._image;

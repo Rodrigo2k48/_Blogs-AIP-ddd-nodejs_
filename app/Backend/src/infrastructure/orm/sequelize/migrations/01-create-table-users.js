@@ -25,10 +25,10 @@ module.exports = {
       image: {
         type: Sequelize.STRING,
         allowNull: true,
-      }
+      },
     });
   },
   async down(queryInterface) {
     await queryInterface.dropTable('users');
-  }
+  },
 };

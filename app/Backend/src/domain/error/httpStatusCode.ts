@@ -8,6 +8,7 @@ enum HTTP_STATUS {
   UnprocessableContentError = 422,
   InternalServerError = 500,
   NotFoundError = 404,
+  ConflictError = 409,
 }
 
 export default HTTP_STATUS;

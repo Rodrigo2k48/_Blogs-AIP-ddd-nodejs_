@@ -1,7 +1,8 @@
 import express from 'express';
 import 'express-async-errors';
-import authRouter from '../../infrastructure/routes/authRoute';
+import authRoute from '../../infrastructure/routes/authRoute';
 import HttpErrorMiddleware from '../../infrastructure/middleware/HttpErrorMiddleware';
+import userRoute from '../../infrastructure/routes/userRoute';
 
 class App {
   public app: express.Express;
@@ -27,7 +28,8 @@ class App {
     // Test Route
     this.app.get('/', (req, res) => res.send('Ok'));
     // Route aplication
-    this.app.use('/login', authRouter);
+    this.app.use('/login', authRoute);
+    this.app.use('/user', userRoute);
   }
   private errorHandler(): void {
     this.app.use(HttpErrorMiddleware.error);
