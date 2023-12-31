@@ -3,13 +3,13 @@ import { App } from '../../../../../application/webService/app';
 // import { TokenManager } from '../../../../../domain/entities/Token/TokenManager';
 import request from 'supertest';
 import Sinon from 'sinon';
-import { USER_EMAIL, USER_IMAGE, USER_IN_DB, USER_NAME, USER_PASSWORD } from './userRoute.mock';
+import { DATABASE_MOCK, TOKEN_VALID, USER_EMAIL, USER_IMAGE, USER_IN_DB, USER_NAME, USER_PASSWORD } from './userRoute.mock';
 import { Model } from 'sequelize';
 import HTTP_STATUS from '../../../../../domain/error/httpStatusCode';
 
 describe('application User route - POST', () => {
+  const app = new App().app;
   describe('/user - POST', () => {
-    const app = new App().app;
     describe('in case of success', () => {
       afterEach(() => {
         Sinon.restore();
@@ -51,6 +51,90 @@ describe('application User route - POST', () => {
         expect(response.status).toEqual(HTTP_STATUS.ClientErrorBadRequest);
         expect(response.body).toHaveProperty('message');
         expect(response.body.message).toBe('Some required fields are missing');
+      });
+    });
+  });
+  describe('/user - GET', () => {
+    describe('in case of sucess', () => {
+      afterEach(() => {
+        Sinon.restore();
+      });
+      it('If the user has a valid token, it must be possible to have access to all users registered in the database', async () => {
+        Sinon.stub(Model, 'findAll').resolves([{ dataValues: DATABASE_MOCK } as Model]);
+        const response = await request(app)
+          .get('/user')
+          .set({
+            Authorization: TOKEN_VALID,
+          })
+          .send();
+        expect(response.status).toBe(HTTP_STATUS.SuccessOK);
+        expect(response.body).toHaveProperty('users');
+        expect(response.body.users).not.toHaveLength(0);
+      });
+    });
+    describe('in case of token error', () => {
+      afterEach(() => {
+        Sinon.restore();
+      });
+      it('If the user has an invalid token, an error should be triggered in the application - 401', async () => {
+        Sinon.stub(Model, 'findAll').resolves([{ dataValues: DATABASE_MOCK } as Model]);
+        const response = await request(app)
+          .get('/user')
+          .set({
+            Authorization: 'invalid token',
+          })
+          .send();
+        expect(response.status).toBe(HTTP_STATUS.ClientErrorUnauthorized);
+        expect(response.body).toHaveProperty('message');
+        expect(response.body.message).toBe('Token must be a valid token');
+      });
+      it('If the user does not have any type of token, whether valid or invalid, an error must be triggered in the application - 401', async () => {
+        Sinon.stub(Model, 'findAll').resolves([{ dataValues: DATABASE_MOCK } as Model]);
+        const response = await request(app).get('/user').send();
+        expect(response.status).toBe(HTTP_STATUS.ClientErrorUnauthorized);
+        expect(response.body).toHaveProperty('message');
+        expect(response.body.message).toBe('Token Not found');
+      });
+
+      it('If the user does not have any type of token, whether valid or invalid, an error must be triggered in the application - 401', async () => {
+        Sinon.stub(Model, 'findAll').throwsException('dataBase Error');
+        const response = await request(app)
+          .get('/user')
+          .set({
+            Authorization: TOKEN_VALID,
+          })
+          .send();
+        expect(response.status).toBe(HTTP_STATUS.InternalServerError);
+        expect(response.body).toHaveProperty('message');
+        expect(response.body.message).toBe('Sinon-provided dataBase Error');
+      });
+    });
+    describe('in case of database error', () => {
+      afterEach(() => {
+        Sinon.restore();
+      });
+      it('If an unknown error occurs or the database crashes at the time of the request, in addition to the error being triggered in the application, it must be specified through a message', async () => {
+        Sinon.stub(Model, 'findAll').throwsException('dataBase Error');
+        const response = await request(app)
+          .get('/user')
+          .set({
+            Authorization: TOKEN_VALID,
+          })
+          .send();
+        expect(response.status).toBe(HTTP_STATUS.InternalServerError);
+        expect(response.body).toHaveProperty('message');
+        expect(response.body.message).toBe('Sinon-provided dataBase Error');
+        Sinon.restore();
+        Sinon.stub(Model, 'findAll').throwsException('another dataBase Error');
+        const newResponse = await request(app)
+          .get('/user')
+          .set({
+            Authorization: TOKEN_VALID,
+          })
+          .send();
+        expect(newResponse.status).toBe(HTTP_STATUS.InternalServerError);
+        expect(newResponse.body).toHaveProperty('message');
+        expect(newResponse.body.message).toBe('Sinon-provided another dataBase Error');
       });
     });
   });
