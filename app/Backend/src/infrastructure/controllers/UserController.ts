@@ -24,4 +24,12 @@ export class UserController {
       next(error);
     }
   }
+  async getAllUsers(req: Request, res: Response, next: NextFunction): Promise<void | Response> {
+    try {
+      const users = await this.userService.getAllUsers();
+      return res.status(200).json({ users });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

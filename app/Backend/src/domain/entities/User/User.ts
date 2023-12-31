@@ -3,7 +3,7 @@ import { Password } from '../ValueObject/Password/Password';
 import { DisplayName } from '../ValueObject/DisplayName/DisplayName';
 
 export interface UserInterface {
-  id?: number;
+  id?: number | null;
   email: string;
   password: string;
   userName?: string;

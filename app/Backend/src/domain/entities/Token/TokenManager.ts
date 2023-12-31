@@ -26,5 +26,3 @@ export class TokenManager implements TokenRepository<jwt.JwtPayload> {
     }
   }
 }
-
-
