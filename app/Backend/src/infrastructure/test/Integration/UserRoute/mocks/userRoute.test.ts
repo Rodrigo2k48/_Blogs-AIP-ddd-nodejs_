@@ -3,7 +3,7 @@ import { App } from '../../../../../application/webService/app';
 // import { TokenManager } from '../../../../../domain/entities/Token/TokenManager';
 import request from 'supertest';
 import Sinon from 'sinon';
-import { DATABASE_MOCK, TOKEN_VALID, USER_EMAIL, USER_IMAGE, USER_IN_DB, USER_NAME, USER_PASSWORD } from './userRoute.mock';
+import { DATABASE_MOCK, ID_INVALID, TOKEN_VALID, USER_EMAIL, USER_IMAGE, USER_IN_DB, USER_NAME, USER_PASSWORD } from './userRoute.mock';
 import { Model } from 'sequelize';
 import HTTP_STATUS from '../../../../../domain/error/httpStatusCode';
 
@@ -95,19 +95,6 @@ describe('application User route - POST', () => {
         expect(response.body).toHaveProperty('message');
         expect(response.body.message).toBe('Token Not found');
       });
-
-      it('If the user does not have any type of token, whether valid or invalid, an error must be triggered in the application - 401', async () => {
-        Sinon.stub(Model, 'findAll').throwsException('dataBase Error');
-        const response = await request(app)
-          .get('/user')
-          .set({
-            Authorization: TOKEN_VALID,
-          })
-          .send();
-        expect(response.status).toBe(HTTP_STATUS.InternalServerError);
-        expect(response.body).toHaveProperty('message');
-        expect(response.body.message).toBe('Sinon-provided dataBase Error');
-      });
     });
     describe('in case of database error', () => {
       afterEach(() => {
@@ -135,6 +122,34 @@ describe('application User route - POST', () => {
         expect(newResponse.status).toBe(HTTP_STATUS.InternalServerError);
         expect(newResponse.body).toHaveProperty('message');
         expect(newResponse.body.message).toBe('Sinon-provided another dataBase Error');
+      });
+    });
+  });
+  describe('/user/:id - GET', () => {
+    afterEach(() => {
+      Sinon.restore();
+    });
+    describe('in case of sucess', async () => {
+      it('If the user exists, it must be possible to return his information by passing his respective ID through the request parameter - 200', async () => {
+        Sinon.stub(Model, 'findByPk')
+          .withArgs(1)
+          .resolves({ dataValues: USER_IN_DB } as Model);
+        const response = await request(app).get('/user/1').set({
+          Authorization: TOKEN_VALID,
+        });
+        expect(response.status).toBe(HTTP_STATUS.SuccessOK);
+        expect(response.body).toEqual(USER_IN_DB);
+      });
+    });
+    describe('in case of error', () => {
+      it('If the id is not included in the database, an error must be triggered in the application indicating that the user is not registered in the database - 404', async () => {
+        Sinon.stub(Model, 'findByPk')
+          .withArgs(1)
+          .resolves({ dataValues: USER_IN_DB } as Model);
+        const response = await request(app).get(`/user/${ID_INVALID}`).set({
+          Authorization: TOKEN_VALID,
+        });
+        expect(response.status).toBe(HTTP_STATUS.NotFoundError);
       });
     });
   });

@@ -47,3 +47,5 @@ export const mockToken = () => {
 };
 
 export const TOKEN_VALID: string = mockToken();
+
+export const ID_INVALID = '999999999999';
