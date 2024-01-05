@@ -5,16 +5,27 @@ import { TokenManager } from '../../domain/entities/Token/TokenManager';
 import { User, UserInterface } from '../../domain/entities/User/User';
 import Conflict from '../../domain/error/typeErros/Conflict';
 import { UserRepository } from '../../domain/repository/UserRepository';
+import { GetUserById } from '../../application/useCases/GetUserById/GetUserById';
+import NotFoundError from '../../domain/error/typeErros/NotFound';
 
 export class UserService implements UserRepository {
   protected createUser: CreateUser;
   protected TokenManager: TokenManager;
   protected getUsers: GetAllUsers;
+  protected getById: GetUserById;
 
-  constructor(createUser: CreateUser, TokenManager: TokenManager, getAllUsers: GetAllUsers) {
+  constructor(createUser: CreateUser, TokenManager: TokenManager, getAllUsers: GetAllUsers, getUserById: GetUserById) {
+    this.getById = getUserById;
     this.getUsers = getAllUsers;
     this.createUser = createUser;
     this.TokenManager = TokenManager;
+  }
+  async getUserById(id: number): Promise<Omit<UserInterface, 'password'>> {
+    const hasUser = await this.getById.execute(id);
+    if (!hasUser) {
+      throw new NotFoundError('User does not exist');
+    }
+    return hasUser;
   }
   async getAllUsers(): Promise<Omit<UserInterface, 'password'>[]> {
     const users = await this.getUsers.execute();

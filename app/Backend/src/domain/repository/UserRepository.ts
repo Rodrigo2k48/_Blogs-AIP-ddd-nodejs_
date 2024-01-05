@@ -5,4 +5,5 @@ import { UserInterface } from '../entities/User/User';
 export interface UserRepository {
   registrerNewUser(userInfos: UserZod): Promise<string | void>;
   getAllUsers(): Promise<Omit<UserInterface, 'password'>[]>;
+  getUserById(id: number): Promise<Omit<UserInterface, 'password'>>;
 }

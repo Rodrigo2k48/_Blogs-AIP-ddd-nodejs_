@@ -6,14 +6,16 @@ import { UserService } from '../../../infrastructure/services/UserService';
 import { CreateUser } from '../../useCases/CreateUser/CreateUser';
 import { FindUserByEmail } from '../../useCases/FindUserByEmail/FindUserByEmail';
 import { GetAllUsers } from '../../useCases/GetAllUsers/GetAllUsers';
+import { GetUserById } from '../../useCases/GetUserById/GetUserById';
 
 const findUserByEmail = new FindUserByEmail();
 const getAllUsers = new GetAllUsers();
 const createUser = new CreateUser();
 const tokenManager = new TokenManager();
+const getUserById = new GetUserById();
 
 const authService = new AuthService(findUserByEmail, tokenManager);
 export const authController = new AuthController(authService);
 
-const userService = new UserService(createUser, tokenManager, getAllUsers);
+const userService = new UserService(createUser, tokenManager, getAllUsers, getUserById);
 export const userController = new UserController(userService);
