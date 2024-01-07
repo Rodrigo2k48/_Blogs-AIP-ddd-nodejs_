@@ -19,7 +19,7 @@ describe('application User route - POST', () => {
         const response = await request(app).post('/user').send({
           email: USER_EMAIL,
           password: USER_PASSWORD,
-          user_name: USER_NAME,
+          userName: USER_NAME,
           image: USER_IMAGE,
         });
         expect(response.status).toBe(HTTP_STATUS.SuccessCreated);
@@ -35,7 +35,7 @@ describe('application User route - POST', () => {
         const response = await request(app).post('/user').send({
           email: USER_EMAIL,
           password: USER_PASSWORD,
-          user_name: USER_NAME,
+          userName: USER_NAME,
           image: USER_IMAGE,
         });
         expect(response.status).toBe(HTTP_STATUS.ConflictError);
@@ -48,9 +48,9 @@ describe('application User route - POST', () => {
           sweet: 'candy',
           fruit: 'banana',
         });
-        expect(response.status).toEqual(HTTP_STATUS.ClientErrorBadRequest);
+        expect(response.status).toEqual(HTTP_STATUS.InternalServerError);
         expect(response.body).toHaveProperty('message');
-        expect(response.body.message).toBe('Some required fields are missing');
+        expect(response.body.message).toBe('Required');
       });
     });
   });

@@ -4,7 +4,7 @@ import { AuthValidate } from '../middleware/AuthValidate';
 
 const userRoute = Router();
 
-userRoute.post('/', (req: Request, res: Response, next: NextFunction) => userController.registrer(req, res, next));
+userRoute.post('/', (req: Request, res: Response, next: NextFunction) => userController.registrerNewUser(req, res, next));
 userRoute.get('/', AuthValidate.TokenValidate, (req: Request, res: Response, next: NextFunction) => userController.getAllUsers(req, res, next));
 userRoute.get('/:id', AuthValidate.TokenValidate, (req: Request, res: Response, next: NextFunction) => userController.getUserById(req, res, next));
 

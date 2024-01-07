@@ -3,7 +3,7 @@ import { CreateUser } from '../CreateUser';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { USER_IN_DB } from '../test/mocks/createUser.mock';
 import { Model } from 'sequelize';
-import { UserZod } from '../../../validation/zod/schemas/zodTypes';
+import { UserInterface } from '../../../../domain/entities/User/User';
 
 describe('CreateUser Usecase', () => {
   describe('Sequelize Type', () => {
@@ -20,10 +20,10 @@ describe('CreateUser Usecase', () => {
       });
       it('shoud be possible to create an new user in database', async () => {
         Sinon.stub(Model, 'findOrCreate').resolves([{ dataValues: USER_IN_DB } as unknown as Model, true]);
-        const newUser = (await create.execute(USER_IN_DB)) as UserZod;
+        const newUser = (await create.execute(USER_IN_DB)) as UserInterface;
         expect(newUser).toHaveProperty('email');
         expect(newUser).toHaveProperty('password');
-        expect(newUser).toHaveProperty('user_name');
+        expect(newUser).toHaveProperty('userName');
         expect(newUser).toHaveProperty('image');
         expect(newUser).toHaveProperty('id');
       });
