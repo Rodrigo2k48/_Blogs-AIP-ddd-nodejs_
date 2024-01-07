@@ -22,7 +22,7 @@ describe('application authentication route - POST', () => {
           email: USER_EMAIL,
           password: USER_PASSWORD,
         });
-        expect(response.status).toEqual(HTTP_STATUS.SuccessOK);
+        expect(response.status).toEqual(HTTP_STATUS.SuccessCreated);
         expect(response.body).toHaveProperty('token');
         const token = tokenManager.verifyToken(response.body.token) as UserInterface;
         expect(token.email).toEqual(USER_EMAIL);

@@ -1,9 +1,8 @@
 /* eslint-disable no-unused-vars */
-import { UserZod } from '../../application/validation/zod/schemas/zodTypes';
 import { UserInterface } from '../entities/User/User';
 
 export interface UserRepository {
-  registrerNewUser(userInfos: UserZod): Promise<string | void>;
-  getAllUsers(): Promise<Omit<UserInterface, 'password'>[]>;
-  getUserById(id: number): Promise<Omit<UserInterface, 'password'>>;
+  registrer(userInfos: UserInterface): Promise<string | void>;
+  getAll(): Promise<Omit<UserInterface, 'password'>[]>;
+  getById(id: number): Promise<Omit<UserInterface, 'password'>>;
 }

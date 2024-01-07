@@ -18,7 +18,7 @@ export class AuthService implements AuthRepository {
     if (!hasUser) {
       throw new BadRequest('invalid field');
     }
-    const user = new User(hasUser.email, userPassword, hasUser.user_name, hasUser.image, hasUser.id as number);
+    const user = new User(hasUser.email, userPassword, hasUser.userName, hasUser.image, Number(hasUser.id));
     if (!user.passMethods().compare(hasUser.password)) {
       throw new BadRequest('invalid field');
     }

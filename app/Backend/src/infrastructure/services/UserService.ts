@@ -1,6 +1,5 @@
 import { GetAllUsers } from './../../application/useCases/GetAllUsers/GetAllUsers';
 import { CreateUser } from '../../application/useCases/CreateUser/CreateUser';
-import { UserZod } from '../../application/validation/zod/schemas/zodTypes';
 import { TokenManager } from '../../domain/entities/Token/TokenManager';
 import { User, UserInterface } from '../../domain/entities/User/User';
 import Conflict from '../../domain/error/typeErros/Conflict';
@@ -12,39 +11,28 @@ export class UserService implements UserRepository {
   protected createUser: CreateUser;
   protected TokenManager: TokenManager;
   protected getUsers: GetAllUsers;
-  protected getById: GetUserById;
+  protected getUserById: GetUserById;
 
   constructor(createUser: CreateUser, TokenManager: TokenManager, getAllUsers: GetAllUsers, getUserById: GetUserById) {
-    this.getById = getUserById;
+    this.getUserById = getUserById;
     this.getUsers = getAllUsers;
     this.createUser = createUser;
     this.TokenManager = TokenManager;
   }
-  async getUserById(id: number): Promise<Omit<UserInterface, 'password'>> {
-    const hasUser = await this.getById.execute(id);
-    if (!hasUser) {
-      throw new NotFoundError('User does not exist');
-    }
-    return hasUser;
-  }
-  async getAllUsers(): Promise<Omit<UserInterface, 'password'>[]> {
-    const users = await this.getUsers.execute();
-    return users;
-  }
 
-  async registrerNewUser(userInfos: UserZod): Promise<string | void> {
-    const { email, password, user_name, image } = userInfos;
-    const user = new User(email, password, user_name, image);
+  async registrer(userInfos: UserInterface): Promise<string | void> {
+    const { email, password, userName, image } = userInfos;
+    const user = new User(email, password, userName, image);
     const newUser = await this.createUser.execute({
       email: user.email,
       password: user.passMethods().valueInHash(),
-      user_name: user.userName,
+      userName,
       image: user.image,
     });
     if (newUser) {
       const tokenInfos = {
         email: user.email,
-        user_name: user.userName,
+        userName: user.userName,
         image: user.image,
       };
       const token = this.TokenManager.createToken(tokenInfos);
@@ -52,5 +40,16 @@ export class UserService implements UserRepository {
     } else {
       throw new Conflict('Conflict');
     }
+  }
+  async getById(id: number): Promise<Omit<UserInterface, 'password'>> {
+    const hasUser = await this.getUserById.execute(id);
+    if (!hasUser) {
+      throw new NotFoundError('User does not exist');
+    }
+    return hasUser;
+  }
+  async getAll(): Promise<Omit<UserInterface, 'password'>[]> {
+    const users = await this.getUsers.execute();
+    return users;
   }
 }

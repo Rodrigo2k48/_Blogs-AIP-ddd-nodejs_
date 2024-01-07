@@ -3,7 +3,7 @@ import sequelize from './index';
 
 export class SequelizeUser extends Model<InferAttributes<SequelizeUser>, InferCreationAttributes<SequelizeUser>> {
   declare id: number | null;
-  declare user_name: string;
+  declare userName: string;
   declare email: string;
   declare password: string;
   declare image: string | undefined;
@@ -24,7 +24,7 @@ SequelizeUser.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    user_name: {
+    userName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
