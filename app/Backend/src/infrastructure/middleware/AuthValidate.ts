@@ -11,7 +11,7 @@ export class AuthValidate {
     try {
       const userInfos = new TokenManager().verifyToken(authorization);
       //In case in the future i need user information
-      req.body.user = userInfos;
+      req.body.userInfos = userInfos;
       next();
     } catch (_error) {
       throw new UnauthorizedError('Token must be a valid token');

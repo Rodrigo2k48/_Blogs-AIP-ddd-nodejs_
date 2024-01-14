@@ -1,4 +1,4 @@
-import { obsceneWordsDefault } from './shared/obsceneWords';
+import { obsceneWordsDefault } from './../../shared/ObscenceWords';
 
 /* eslint-disable no-unused-vars */
 export interface ObsenceWordsInterface {

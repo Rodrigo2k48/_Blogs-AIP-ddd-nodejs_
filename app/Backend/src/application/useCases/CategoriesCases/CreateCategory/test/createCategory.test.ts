@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { CreateCategory } from '../CreateCategory';
 import Sinon from 'sinon';
 import { Model } from 'sequelize';
-import { CATEGORY_MOCK } from './mocks/createCategory.mock';
+import { CATEGORIES_DATABASE, CATEGORIE_INPUT, CATEGORY_CLASS_PROPERTIES } from './../../../../../domain/shared/mocks/Category/index';
 
 describe('CreateCategory UseCase', () => {
   describe('Sequelize Type', () => {
@@ -13,28 +13,32 @@ describe('CreateCategory UseCase', () => {
     afterEach(() => {
       Sinon.restore();
     });
-    describe('in case of sucess', () => {
-      it('should be possible to create a new Category', async () => {
+    describe('In case of sucess', () => {
+      it('Should be possible to create an instance of CreateCategory', () => {
+        expect(create).toBeInstanceOf(CreateCategory);
+      });
+      it('Should be possible to create a new category', async () => {
         Sinon.stub(Model, 'findOrCreate').resolves([
           {
-            dataValues: CATEGORY_MOCK,
+            dataValues: CATEGORIE_INPUT,
           } as unknown as Model,
           true,
         ]);
-        const newCategory = await create.execute(CATEGORY_MOCK.categoryName);
-        expect(newCategory).toHaveProperty('id');
-        expect(newCategory).toHaveProperty('categoryName');
+        const newCategory = await create.execute(CATEGORIE_INPUT.categoryName);
+        CATEGORY_CLASS_PROPERTIES.forEach((property) => {
+          expect(newCategory).toHaveProperty(property);
+        });
       });
     });
-    describe('in case of error', () => {
-      it('if the category is already registered in the database, the method must return false, indicanting the rejection of registering a duplicate of the same category', async () => {
+    describe('In case of error', () => {
+      it('If the category is already registered in the database, the method must return false, indicanting the rejection of registering a duplicate of the same category', async () => {
         Sinon.stub(Model, 'findOrCreate').resolves([
           {
             dataValues: null,
           } as unknown as Model,
           false,
         ]);
-        const newCategory = await create.execute(CATEGORY_MOCK.categoryName);
+        const newCategory = await create.execute(CATEGORIES_DATABASE[0].categoryName);
         expect(newCategory).toBeFalsy();
       });
     });

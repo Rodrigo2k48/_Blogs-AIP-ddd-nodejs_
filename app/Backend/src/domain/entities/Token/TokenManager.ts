@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
-import { TokenRepository } from '../../repository/TokenRepository';
+import { TokenRepository } from '../../repository/Token';
 import { UserInterface } from '../User/User';
 import UnauthorizedError from '../../error/typeErros/Unauthorized';
 
@@ -22,7 +22,7 @@ export class TokenManager implements TokenRepository<jwt.JwtPayload> {
       const isValidToken = jwt.verify(token, this._secret, this._config);
       return isValidToken;
     } catch (_err) {
-      throw new UnauthorizedError('Expired or invalid token');
+      throw new UnauthorizedError('Expired or invalid token.');
     }
   }
 }

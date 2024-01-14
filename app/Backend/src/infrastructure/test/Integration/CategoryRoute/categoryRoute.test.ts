@@ -2,18 +2,19 @@ import { Model } from 'sequelize';
 import Sinon from 'sinon';
 import { afterEach, describe, expect, it } from 'vitest';
 import request from 'supertest';
-import { CATEGORIES_DATABASE, CATEGORIE_INPUT, TOKEN_VALID } from './mocks/categories.mock';
+import { CATEGORIES_DATABASE, CATEGORIE_INPUT } from './../../../../domain/shared/mocks/Category/index';
+import { TOKEN_VALID } from '../../../../domain/shared/mocks/Utils/index';
 import { App } from '../../../../application/webService/app';
 import HTTP_STATUS from '../../../../domain/error/httpStatusCode';
 
-describe('application Categories route', () => {
+describe('Application categories route', () => {
   const app = new App().app;
   describe('/categories - GET', () => {
     afterEach(() => {
       Sinon.restore();
     });
-    describe('in case of success', () => {
-      it('if the user has a valid token, it must be possible to redeem all categories available in the application database - 200', async () => {
+    describe('In case of success', () => {
+      it('If the user has a valid token, it must be possible to redeem all categories available in the application database - 200', async () => {
         Sinon.stub(Model, 'findAll').resolves([{ dataValues: CATEGORIES_DATABASE } as unknown as Model]);
         const response = await request(app).get('/categories').set({
           Authorization: TOKEN_VALID,
@@ -21,8 +22,8 @@ describe('application Categories route', () => {
         expect(response.status).toEqual(HTTP_STATUS.SuccessOK);
       });
     });
-    describe('in case of database error', async () => {
-      it('', async () => {
+    describe('In case of database error', async () => {
+      it('If an unknown error occurs or the database crashes at the time of the request, in addition to the error being triggered in the application, it must be specified through a message - 500', async () => {
         Sinon.stub(Model, 'findAll').throwsException('dataBase Error');
         const response = await request(app).get('/categories').set({
           Authorization: TOKEN_VALID,
@@ -37,8 +38,8 @@ describe('application Categories route', () => {
     afterEach(() => {
       Sinon.restore();
     });
-    describe('in case of success', () => {
-      it('if everything is ok regarding validation, it should be possible to register a new category to the database', async () => {
+    describe('In case of success', () => {
+      it('If everything is ok regarding validation, it should be possible to register a new category to the database - 201', async () => {
         Sinon.stub(Model, 'findOrCreate').resolves([
           {
             dataValues: CATEGORIE_INPUT,
@@ -54,10 +55,11 @@ describe('application Categories route', () => {
             name: CATEGORIE_INPUT.categoryName,
           });
         expect(response.body).toEqual(CATEGORIE_INPUT);
+        expect(response.status).toEqual(HTTP_STATUS.SuccessCreated);
       });
     });
-    describe('in case of error', () => {
-      it('If you try to register a new category that already exists in the database, an error is triggered in the application', async () => {
+    describe('In case of error', () => {
+      it('If you try to register a new category that already exists in the database, an error is triggered in the application - 409', async () => {
         Sinon.stub(Model, 'findOrCreate').resolves([
           {
             dataValues: CATEGORIE_INPUT,
@@ -72,11 +74,9 @@ describe('application Categories route', () => {
           .send({
             name: CATEGORIE_INPUT.categoryName,
           });
-        console.log(response);
-
         expect(response.body).toHaveProperty('message');
         expect(response.status).toEqual(HTTP_STATUS.ConflictError);
-        expect(response.body.message).toEqual('Category already exists');
+        expect(response.body.message).toEqual('Category already exists.');
       });
     });
   });

@@ -15,3 +15,9 @@ export const userInputSchema = z
     image: z.string(),
   })
   .required();
+
+export const categoryInputSchema = z
+  .object({
+    name: z.string(),
+  })
+  .required();

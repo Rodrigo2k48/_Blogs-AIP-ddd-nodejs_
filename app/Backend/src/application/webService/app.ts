@@ -3,6 +3,7 @@ import 'express-async-errors';
 import authRoute from '../../infrastructure/routes/authRoute';
 import HttpErrorMiddleware from '../../infrastructure/middleware/HttpErrorMiddleware';
 import userRoute from '../../infrastructure/routes/userRoute';
+import categoryRoute from '../../infrastructure/routes/categoryRoute';
 
 class App {
   public app: express.Express;
@@ -30,6 +31,7 @@ class App {
     // Route aplication
     this.app.use('/login', authRoute);
     this.app.use('/user', userRoute);
+    this.app.use('/categories', categoryRoute);
   }
   private errorHandler(): void {
     this.app.use(HttpErrorMiddleware.error);

@@ -2,8 +2,8 @@ import { DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequ
 import sequelize from './index';
 
 export class SequelizeCategorie extends Model<InferAttributes<SequelizeCategorie>, InferCreationAttributes<SequelizeCategorie>> {
-  declare id: number | null;
-  declare category_name: string;
+  declare id?: number;
+  declare categoryName: string;
 }
 SequelizeCategorie.init(
   {
@@ -12,7 +12,8 @@ SequelizeCategorie.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    category_name: {
+    categoryName: {
+      field: 'category_name',
       type: DataTypes.STRING,
       allowNull: false,
     },

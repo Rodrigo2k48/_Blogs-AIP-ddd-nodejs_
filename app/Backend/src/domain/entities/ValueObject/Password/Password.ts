@@ -1,6 +1,6 @@
 import BadRequest from '../../../error/typeErros/BadRequest';
 import bcrypt from 'bcrypt';
-import { HashRepository } from '../../../repository/HashRepository';
+import { HashRepository } from '../../../repository/Hash';
 
 export class Password implements HashRepository {
   private _value: string;
@@ -8,7 +8,7 @@ export class Password implements HashRepository {
 
   constructor(value: string) {
     if (value.length < 6) {
-      throw new BadRequest('"password" length must be at least 6 characters long');
+      throw new BadRequest('"password" length must be at least 6 characters long.');
     }
     this._value = value;
   }
@@ -17,7 +17,7 @@ export class Password implements HashRepository {
   }
   set value(value: string) {
     if (value.length < 6) {
-      throw new BadRequest('"password" length must be at least 6 characters long');
+      throw new BadRequest('"password" length must be at least 6 characters long.');
     }
     this._value = value;
   }

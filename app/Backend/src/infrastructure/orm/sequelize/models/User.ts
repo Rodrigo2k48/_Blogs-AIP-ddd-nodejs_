@@ -25,6 +25,7 @@ SequelizeUser.init(
       allowNull: false,
     },
     userName: {
+      field: 'user_name',
       type: DataTypes.STRING,
       allowNull: false,
     },

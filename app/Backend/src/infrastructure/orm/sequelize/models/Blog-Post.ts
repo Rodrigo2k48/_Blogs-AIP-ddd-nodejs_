@@ -4,8 +4,8 @@ import { SequelizeUser } from './User';
 
 export class SequelizeBlogPost extends Model<InferAttributes<SequelizeBlogPost>, InferCreationAttributes<SequelizeBlogPost>> {
   declare id: number | null;
-  declare title_post: string;
-  declare content_post: string;
+  declare titlePost: string;
+  declare contentPost: string;
   declare user_id: ForeignKey<SequelizeUser['id']>;
   declare createdAt: Date | null;
   declare updatedAt: Date | null;
@@ -19,11 +19,13 @@ SequelizeBlogPost.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    title_post: {
+    titlePost: {
+      field: 'title_post',
       type: DataTypes.STRING(200),
       allowNull: false,
     },
-    content_post: {
+    contentPost: {
+      field: 'content_post',
       type: DataTypes.STRING(450),
       allowNull: false,
     },

@@ -12,7 +12,7 @@ export class CreateCategory extends SequelizeAdapterCategory {
       },
     });
     if (created) {
-      return sequelizeCategory.dataValues as unknown as CategoriesInterface;
+      return sequelizeCategory.dataValues;
     }
     return created;
   }

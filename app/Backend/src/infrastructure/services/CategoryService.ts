@@ -2,7 +2,7 @@ import { CreateCategory } from '../../application/useCases/CategoriesCases/Creat
 import { GetAllCategories } from '../../application/useCases/CategoriesCases/GetAllCategories/GetAllCategories';
 import { CategoriesInterface } from '../../domain/entities/Categories/Categories';
 import Conflict from '../../domain/error/typeErros/Conflict';
-import { CategoryRepository } from '../../domain/repository/CategoryRepository';
+import { CategoryRepository } from '../../domain/repository/Category';
 
 export class CategoryService implements CategoryRepository {
   protected create: CreateCategory;
@@ -12,15 +12,15 @@ export class CategoryService implements CategoryRepository {
     this.create = create;
     this.getAll = getAll;
   }
-  async createCategory(category: string): Promise<CategoriesInterface | boolean> {
+  async newCategory(category: string): Promise<CategoriesInterface | boolean> {
     const newCategory = await this.create.execute(category);
     if (!newCategory) {
-      throw new Conflict('Category already exists');
+      throw new Conflict('Category already exists.');
     }
     return newCategory;
   }
 
-  async getAllCategories(): Promise<CategoriesInterface[]> {
+  async allCategories(): Promise<CategoriesInterface[]> {
     const allCategories = await this.getAll.execute();
     return allCategories;
   }

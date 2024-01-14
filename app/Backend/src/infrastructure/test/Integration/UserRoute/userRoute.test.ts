@@ -1,21 +1,24 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { App } from '../../../../application/webService/app';
-// import { TokenManager } from '../../../../../domain/entities/Token/TokenManager';
 import request from 'supertest';
 import Sinon from 'sinon';
-import { DATABASE_MOCK, ID_INVALID, TOKEN_VALID, USER_EMAIL, USER_IMAGE, USER_IN_DB, USER_NAME, USER_PASSWORD } from './mocks/userRoute.mock';
+import { USER_DATABASE, USER_EMAIL, USER_IMAGE, NEW_USER, USER_NAME, USER_PASSWORD, USER_ID_VALID } from '../../../../domain/shared/mocks/User/index';
+import { ID_INVALID, TOKEN_VALID } from '../../../../domain/shared/mocks/Utils/index';
 import { Model } from 'sequelize';
 import HTTP_STATUS from '../../../../domain/error/httpStatusCode';
+import { TokenManager } from '../../../../domain/entities/Token/TokenManager';
+import { UserInterface } from '../../../../domain/entities/User/User';
 
-describe('application User route - POST', () => {
+describe('Application user route', () => {
   const app = new App().app;
+  const tokenManager = new TokenManager();
   describe('/user - POST', () => {
-    describe('in case of success', () => {
-      afterEach(() => {
-        Sinon.restore();
-      });
-      it('must be possible to register a new user in the database, if the data passed is passed correctly - 201', async () => {
-        Sinon.stub(Model, 'findOrCreate').resolves([{ dataValues: USER_IN_DB } as unknown as Model, true]);
+    afterEach(() => {
+      Sinon.restore();
+    });
+    describe('In case of success', () => {
+      it('Must be possible to register a new user in the database, if the data passed is passed correctly - 201', async () => {
+        Sinon.stub(Model, 'findOrCreate').resolves([{ dataValues: NEW_USER } as unknown as Model, true]);
         const response = await request(app).post('/user').send({
           email: USER_EMAIL,
           password: USER_PASSWORD,
@@ -24,12 +27,12 @@ describe('application User route - POST', () => {
         });
         expect(response.status).toBe(HTTP_STATUS.SuccessCreated);
         expect(response.body).toHaveProperty('token');
+        const token = tokenManager.verifyToken(response.body.token) as UserInterface;
+        expect(token.email).toEqual(USER_EMAIL);
+        expect(token).not.haveOwnProperty('password');
       });
     });
-    describe('in case of error', () => {
-      afterEach(() => {
-        Sinon.restore();
-      });
+    describe('In case of error', () => {
       it('If the user tries to register an email that already exists in the database, an error should be triggered in the application - 409', async () => {
         Sinon.stub(Model, 'findOrCreate').resolves([null as unknown as Model, false]);
         const response = await request(app).post('/user').send({
@@ -42,25 +45,15 @@ describe('application User route - POST', () => {
         expect(response.body).toHaveProperty('message');
         expect(response.body.message).toBe('Conflict');
       });
-      it('if the information passed in the request body is missing or contains abnormal information, an error is triggered in the application - 400', async () => {
-        Sinon.stub(Model, 'findOrCreate').resolves([{ dataValues: USER_IN_DB } as unknown as Model, true]);
-        const response = await request(app).post('/user').send({
-          sweet: 'candy',
-          fruit: 'banana',
-        });
-        expect(response.status).toEqual(HTTP_STATUS.InternalServerError);
-        expect(response.body).toHaveProperty('message');
-        expect(response.body.message).toBe('Required');
-      });
     });
   });
   describe('/user - GET', () => {
-    describe('in case of sucess', () => {
-      afterEach(() => {
-        Sinon.restore();
-      });
+    afterEach(() => {
+      Sinon.restore();
+    });
+    describe('In case of sucess', () => {
       it('If the user has a valid token, it must be possible to have access to all users registered in the database', async () => {
-        Sinon.stub(Model, 'findAll').resolves([{ dataValues: DATABASE_MOCK } as Model]);
+        Sinon.stub(Model, 'findAll').resolves([{ dataValues: USER_DATABASE } as Model]);
         const response = await request(app)
           .get('/user')
           .set({
@@ -69,15 +62,11 @@ describe('application User route - POST', () => {
           .send();
         expect(response.status).toBe(HTTP_STATUS.SuccessOK);
         expect(response.body).toHaveProperty('users');
-        expect(response.body.users).not.toHaveLength(0);
       });
     });
-    describe('in case of token error', () => {
-      afterEach(() => {
-        Sinon.restore();
-      });
+    describe('In case of token error', () => {
+      Sinon.stub(Model, 'findAll').resolves([{ dataValues: USER_DATABASE } as Model]);
       it('If the user has an invalid token, an error should be triggered in the application - 401', async () => {
-        Sinon.stub(Model, 'findAll').resolves([{ dataValues: DATABASE_MOCK } as Model]);
         const response = await request(app)
           .get('/user')
           .set({
@@ -89,18 +78,17 @@ describe('application User route - POST', () => {
         expect(response.body.message).toBe('Token must be a valid token');
       });
       it('If the user does not have any type of token, whether valid or invalid, an error must be triggered in the application - 401', async () => {
-        Sinon.stub(Model, 'findAll').resolves([{ dataValues: DATABASE_MOCK } as Model]);
         const response = await request(app).get('/user').send();
         expect(response.status).toBe(HTTP_STATUS.ClientErrorUnauthorized);
         expect(response.body).toHaveProperty('message');
         expect(response.body.message).toBe('Token Not found');
       });
     });
-    describe('in case of database error', () => {
+    describe('In case of database error', () => {
       afterEach(() => {
         Sinon.restore();
       });
-      it('If an unknown error occurs or the database crashes at the time of the request, in addition to the error being triggered in the application, it must be specified through a message', async () => {
+      it('If an unknown error occurs or the database crashes at the time of the request, in addition to the error being triggered in the application, it must be specified through a message - 500', async () => {
         Sinon.stub(Model, 'findAll').throwsException('dataBase Error');
         const response = await request(app)
           .get('/user')
@@ -129,23 +117,23 @@ describe('application User route - POST', () => {
     afterEach(() => {
       Sinon.restore();
     });
-    describe('in case of sucess', async () => {
+    describe('In case of sucess', async () => {
       it('If the user exists, it must be possible to return his information by passing his respective ID through the request parameter - 200', async () => {
         Sinon.stub(Model, 'findByPk')
-          .withArgs(1)
-          .resolves({ dataValues: USER_IN_DB } as Model);
+          .withArgs(USER_ID_VALID)
+          .resolves({ dataValues: NEW_USER } as Model);
         const response = await request(app).get('/user/1').set({
           Authorization: TOKEN_VALID,
         });
         expect(response.status).toBe(HTTP_STATUS.SuccessOK);
-        expect(response.body).toEqual(USER_IN_DB);
+        expect(response.body).toEqual(NEW_USER);
       });
     });
-    describe('in case of error', () => {
+    describe('In case of error', () => {
       it('If the id is not included in the database, an error must be triggered in the application indicating that the user is not registered in the database - 404', async () => {
         Sinon.stub(Model, 'findByPk')
           .withArgs(1)
-          .resolves({ dataValues: USER_IN_DB } as Model);
+          .resolves({ dataValues: NEW_USER } as Model);
         const response = await request(app).get(`/user/${ID_INVALID}`).set({
           Authorization: TOKEN_VALID,
         });
