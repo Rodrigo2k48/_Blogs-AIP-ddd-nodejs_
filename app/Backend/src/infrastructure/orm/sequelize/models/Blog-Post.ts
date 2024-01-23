@@ -56,6 +56,6 @@ SequelizeUser.hasMany(SequelizeBlogPost, {
 });
 // each post belongs to a single user
 SequelizeBlogPost.belongsTo(SequelizeUser, {
-  foreignKey: 'id',
+  foreignKey: 'user_id',
   as: 'author_post',
 });

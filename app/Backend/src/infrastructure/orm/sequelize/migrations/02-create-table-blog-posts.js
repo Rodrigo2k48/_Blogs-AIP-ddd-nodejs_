@@ -7,12 +7,12 @@ module.exports = {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-        allowNull: false
+        allowNull: false,
       },
       titlePost: {
         type: Sequelize.STRING(200),
         field: 'title_post',
-        allowNull: false
+        allowNull: false,
       },
       contentPost: {
         type: Sequelize.STRING(450),
@@ -28,13 +28,16 @@ module.exports = {
         },
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
+        primaryKey: true,
       },
       createdAt: {
+        defaltValue: new Date(),
         type: Sequelize.DATE,
         field: 'created_at',
         allowNull: false,
       },
       updatedAt: {
+        defaltValue: new Date(),
         type: Sequelize.DATE,
         field: 'updated_at',
         allowNull: false,
@@ -43,10 +46,10 @@ module.exports = {
         type: Sequelize.DATE,
         field: 'deleted_at',
         allowNull: true,
-      }
+      },
     });
   },
   async down(queryInterface) {
     await queryInterface.dropTable('blog_posts');
-  }
+  },
 };
